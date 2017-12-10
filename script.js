@@ -11,11 +11,12 @@ class Simulation {
 }
 
 class Heatsink {
-	constructor(temperatureMap, heatsinkCanvas, radius, numberOfMetalPieces) {
+	constructor(temperatureMap, heatsinkCanvas, radius, numberOfMetalPieces, scoreArea) {
 		this.radius = radius
 		this.numberOfMetalPieces = numberOfMetalPieces
 		this.temperatureMap = temperatureMap
 		this.canvas = heatsinkCanvas
+		this.scoreArea = scoreArea
 		
 		this.width = this.radius * 2 + 1
 		this.canvas.width = this.width
@@ -32,6 +33,8 @@ class Heatsink {
 		this.initialise()
 		this.randomise()
 		this.display()
+		this.score = this.measureScore(this.metalLocations)
+		this.scoreArea.value = this.score
 	}
 	
 	initialise() {
@@ -65,6 +68,26 @@ class Heatsink {
 			}
 		}
 		this.context.putImageData(this.imageData, 0, 0)
+	}
+	
+	improve() {
+		let perturbedMetalLocations = this.metalLocations.slice()
+		x1 = Math.floor(Math.random() * this.width)
+		y1 = Math.floor(Math.random() * this.width)
+		x2 = Math.floor(Math.random() * this.width)
+		y2 = Math.floor(Math.random() * this.width)
+		this.swap(x1, y1, x2, y2)
+		let perturbedScore = this.measureScore(perturbedLocations)
+		if (perturbedScore <= this.score) {
+			this.metalLocations = perturbedMetalLocations
+			this.score = perturbedScore
+			this.scoreArea.value = this.score
+		}
+	}
+	
+	measureScore(locations) {
+		this.temperatureMap.metalLocations = locations
+		return this.temperatureMap.measureSteadyTemperature
 	}
 	
 	setImageData(x, y) {
@@ -122,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let numberOfMetalPiecesInput = document.querySelector('#number_of_metal_pieces')
 	let heatsinkCanvas = document.querySelector('#heatsink_canvas')
 	let temperatureCanvas = document.querySelector('#temperature_canvas')
+	let scoreArea = document.querySelector('#score')
 	let simulation = null
 	let timerTracker = {timerId: 0}
 	
@@ -130,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		let radius = radiusInput.value
 		let numberOfMetalPieces = numberOfMetalPiecesInput.value
 		let temperatureMap = new TemperatureMap(temperatureCanvas, radius)
-		let heatsink = new Heatsink(temperatureMap, heatsinkCanvas, radius, numberOfMetalPieces)
+		let heatsink = new Heatsink(temperatureMap, heatsinkCanvas, radius, numberOfMetalPieces, scoreArea)
 		simulation = new Simulation(heatsink, timerTracker)
 	}
 	document.querySelector('#restart').addEventListener('click', restart)
