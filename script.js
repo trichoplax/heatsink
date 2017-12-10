@@ -65,15 +65,12 @@ class Heatsink {
 			}
 		}
 		this.context.putImageData(this.imageData, 0, 0)
-		this.context.rect(3, 3, 6, 6)
-		this.context.stroke()
 	}
 	
 	setImageData(x, y) {
 		let data = this.imageData.data
 		let offset = this.offset(x, y)
 		let intensity = this.metalLocations[offset] * 255
-		console.log(intensity)
 		let dataOffset = offset * 4
 		data[dataOffset] = intensity
 		data[dataOffset + 1] = intensity
