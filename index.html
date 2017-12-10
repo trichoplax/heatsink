@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset='UTF-8'>
 	<title>Heatsink</title>
 	<link rel='stylesheet' href='styles.css'>
 	<script src='script.js'></script>
 </head>
 <body>
 	<label name='radius'>Radius
-		<input type='number' value='5'>
+		<input id='radius' type='number' value='5'>
 	</label>
-	<label name='metal-pieces'>Metal pieces
-		<input type='number' value='30'>
+	<label name='metal_pieces'>Metal pieces
+		<input id='number_of_metal_pieces' type='number' value='30'>
 	</label>
-	<button>Restart</button>
-	<canvas></canvas>
-	<canvas></canvas>
+	<button id='restart'>Restart</button>
+	<canvas id='shape_canvas'></canvas>
+	<canvas id='temperature_canvas'></canvas>
 	<label name='Locations'>Locations<textarea readonly></textarea></label>
 </body>
 </html>
